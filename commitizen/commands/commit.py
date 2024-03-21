@@ -18,6 +18,7 @@ from commitizen.exceptions import (
     NothingToCommitError,
 )
 from commitizen.git import smart_open
+from commitizen.wrap_stdio import unwrap_stdio, wrap_stdio
 
 
 class Commit:
@@ -77,6 +78,9 @@ class Commit:
         if write_message_to_file is not None and write_message_to_file.is_dir():
             raise NotAllowed(f"{write_message_to_file} is a directory")
 
+        if write_message_to_file:
+            wrap_stdio()   # 비동기 처리시 입출력 설정
+
         retry: bool = self.arguments.get("retry")
 
         if retry:
@@ -87,6 +91,7 @@ class Commit:
         out.info(f"\n{m}\n")
 
         if write_message_to_file:
+            unwrap_stdio()     # 비동기 처리시 입출력 설정 해제
             with smart_open(write_message_to_file, "w", encoding=self.encoding) as file:
                 file.write(m)
 
