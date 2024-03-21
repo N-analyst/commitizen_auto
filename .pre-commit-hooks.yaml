@@ -30,7 +30,7 @@
   name: commitizen prepare-commit-msg
   description: >
     If git commit does not conform to this cz convention, run cz commit.
-  entry: /hooks/prepare-commit-msg.py
+  entry: cz prepare-commit-msg
   stages: [prepare-commit-msg]
   language: python
   language_version: python3

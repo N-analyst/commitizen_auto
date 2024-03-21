@@ -474,6 +474,10 @@ data = {
                     },
                 ],
             },
+            {
+                "name": ["prepare-commit-msg"],
+                "func": commands.PrepareCommitMsg,
+            },
         ],
     },
 }
