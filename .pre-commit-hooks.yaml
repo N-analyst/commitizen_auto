@@ -25,3 +25,23 @@
   language: python
   language_version: python3
   minimum_pre_commit_version: "1.4.3"
+
+- id: cz-prepare-commit-msg
+  name: commitizen prepare-commit-msg
+  description: >
+    If git commit does not conform to this cz convention, run cz commit.
+  entry: ./hooks/prepare-commit-msg.py
+  stages: [prepare-commit-msg]
+  language: python
+  language_version: python3
+  minimum_pre_commit_version: "1.4.3"
+
+- id: cz-post-commit
+  name: commitizen post-commit
+  description: >
+    cz-prepare-commit-msg created backup unlink.
+  entry: ./hooks/post-commit.py
+  stages: [post-commit]
+  language: python
+  language_version: python3
+  minimum_pre_commit_version: "1.4.3"
