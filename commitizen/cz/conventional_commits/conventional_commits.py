@@ -9,6 +9,12 @@ from commitizen.defaults import Questions
 __all__ = ["ConventionalCommitsCz"]
 
 
+def parse_message(text):
+    if isinstance(text, str) and text != '':
+        text = (text[0].upper() + text[1:]).replace('.', '')
+
+    return required_validator(text, msg="Message is required.")
+
 def parse_scope(text):
     if not text:
         return ""
@@ -44,66 +50,61 @@ class ConventionalCommitsCz(BaseCommitizen):
         questions: Questions = [
             {
                 "type": "list",
-                "name": "prefix",
-                "message": "Select the type of change you are committing",
+                "name": "type",
+                "message": "커밋하려는 변경 유형을 선택하세요.",
                 "choices": [
                     {
-                        "value": "fix",
-                        "name": "fix: A bug fix. Correlates with PATCH in SemVer",
+                        "value": "Fix",
+                        "name": "Fix: 버그를 수정할 때 사용합니다.",
                         "key": "x",
                     },
                     {
-                        "value": "feat",
-                        "name": "feat: A new feature. Correlates with MINOR in SemVer",
+                        "value": "Feat",
+                        "name": "Feat: 새로운 기능(feature)이 추가될 때 사용합니다.",
                         "key": "f",
                     },
                     {
-                        "value": "docs",
-                        "name": "docs: Documentation only changes",
+                        "value": "Docs",
+                        "name": "Docs: 문서(예: README, CHANGELOG, CONTRIBUTE 등)를 업데이트할 때 사용합니다.",
                         "key": "d",
                     },
                     {
-                        "value": "style",
+                        "value": "Style",
                         "name": (
-                            "style: Changes that do not affect the "
-                            "meaning of the code (white-space, formatting,"
-                            " missing semi-colons, etc)"
+                            "Style: 코드 형식, 정렬 등과 같은 스타일을 변경할 때 사용합니다. (들여쓰기 같은 포맷이나 세미콜론을 빼먹은 경우)"
                         ),
                         "key": "s",
                     },
                     {
-                        "value": "refactor",
+                        "value": "Refactor",
                         "name": (
-                            "refactor: A code change that neither fixes "
-                            "a bug nor adds a feature"
+                            "Refactor: 코드를 리팩토링했을 때 사용합니다. 즉, 기능 변경 없이 내부 구조를 개선할 때 사용합니다."
                         ),
                         "key": "r",
                     },
                     {
-                        "value": "perf",
-                        "name": "perf: A code change that improves performance",
+                        "value": "Perf",
+                        "name": "Perf: 성능을 향상시키는 코드 변경 시 사용합니다.",
                         "key": "p",
                     },
                     {
-                        "value": "test",
+                        "value": "Test",
                         "name": (
-                            "test: Adding missing or correcting " "existing tests"
+                            "Test: 테스트 코드를 추가하거나 기존 테스트를 수정할 때 사용합니다."
                         ),
                         "key": "t",
                     },
                     {
-                        "value": "build",
+                        "value": "Build",
                         "name": (
-                            "build: Changes that affect the build system or "
-                            "external dependencies (example scopes: pip, docker, npm)"
+                            "Build: 빌드 시스템 또는 외부 의존성과 관련된 변경사항에 사용합니다. (예: pip, docker, npm)"
                         ),
                         "key": "b",
                     },
                     {
-                        "value": "ci",
+                        "value": "Chore",
                         "name": (
-                            "ci: Changes to our CI configuration files and "
-                            "scripts (example scopes: GitLabCI)"
+                            "Chore: 자잘한 수정사항, 패키지 매니저 설정 등, 기타 유지보수 작업을 할 때 사용합니다."
                         ),
                         "key": "c",
                     },
@@ -111,91 +112,35 @@ class ConventionalCommitsCz(BaseCommitizen):
             },
             {
                 "type": "input",
-                "name": "scope",
+                "name": "message",
                 "message": (
-                    "What is the scope of this change? (class or file name): (press [enter] to skip)\n"
+                    "메시지를 입력하세요. (첫글자는 대문자로 변환됩니다. / '.'도 제거 됩니다.)\n"
                 ),
-                "filter": parse_scope,
-            },
-            {
-                "type": "input",
-                "name": "subject",
-                "filter": parse_subject,
-                "message": (
-                    "Write a short and imperative summary of the code changes: (lower case and no period)\n"
-                ),
-            },
-            {
-                "type": "input",
-                "name": "body",
-                "message": (
-                    "Provide additional contextual information about the code changes: (press [enter] to skip)\n"
-                ),
-                "filter": multiple_line_breaker,
-            },
-            {
-                "type": "confirm",
-                "message": "Is this a BREAKING CHANGE? Correlates with MAJOR in SemVer",
-                "name": "is_breaking_change",
-                "default": False,
-            },
-            {
-                "type": "input",
-                "name": "footer",
-                "message": (
-                    "Footer. Information about Breaking Changes and "
-                    "reference issues that this commit closes: (press [enter] to skip)\n"
-                ),
+                "filter": parse_message,
             },
         ]
         return questions
 
     def message(self, answers: dict) -> str:
-        prefix = answers["prefix"]
-        scope = answers["scope"]
-        subject = answers["subject"]
-        body = answers["body"]
-        footer = answers["footer"]
-        is_breaking_change = answers["is_breaking_change"]
+        type = answers["type"]
+        message = answers["message"]
 
-        if scope:
-            scope = f"({scope})"
-        if body:
-            body = f"\n\n{body}"
-        if is_breaking_change:
-            footer = f"BREAKING CHANGE: {footer}"
-        if footer:
-            footer = f"\n\n{footer}"
-
-        message = f"{prefix}{scope}: {subject}{body}{footer}"
-
-        return message
+        return f"{type}: {message}"
 
     def example(self) -> str:
         return (
-            "fix: correct minor typos in code\n"
-            "\n"
-            "see the issue for details on the typos fixed\n"
-            "\n"
-            "closes issue #12"
+            "Docs: Update README.md"
         )
 
     def schema(self) -> str:
         return (
-            "<type>(<scope>): <subject>\n"
-            "<BLANK LINE>\n"
-            "<body>\n"
-            "<BLANK LINE>\n"
-            "(BREAKING CHANGE: )<footer>"
+            "<Type>: <Message>"
         )
 
     def schema_pattern(self) -> str:
         PATTERN = (
-            r"(?s)"  # To explicitly make . match new line
-            r"(build|ci|docs|feat|fix|perf|refactor|style|test|chore|revert|bump)"  # type
-            r"(\(\S+\))?!?:"  # scope
-            r"( [^\n\r]+)"  # subject
-            r"((\n\n.*)|(\s*))?$"
+            r"^(Feat|Fix|Refactor|Style|Docs|Test|Chore|Perf|Build)"  # type
+            r": (.+)$"  # message
         )
         return PATTERN
 
