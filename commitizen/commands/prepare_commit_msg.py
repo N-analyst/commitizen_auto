@@ -9,13 +9,13 @@ from subprocess import CalledProcessError
 from commitizen.config import BaseConfig
 
 class PrepareCommitMsg:
-    def __init__(self, config: BaseConfig, *args):
-        pass
+    def __init__(self, config: BaseConfig, arguments):
+        self.file_path = arguments["file"]
 
     def __call__(self, *args, **kwargs):
         with open("/dev/tty") as tty:
             sys.stdin = tty
-            exit(self.prepare_commit_msg(sys.argv[1]))
+            exit(self.prepare_commit_msg(self.file_path))
 
     def prepare_commit_msg(self, commit_msg_file: Path) -> int:
         # check that commitizen is installed

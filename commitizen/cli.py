@@ -477,6 +477,12 @@ data = {
             {
                 "name": ["prepare-commit-msg"],
                 "func": commands.PrepareCommitMsg,
+                "arguments": [
+                    {
+                        "name": ["-f", "--file"],
+                        "type": str,
+                    }
+                ]
             },
         ],
     },
