@@ -6,7 +6,7 @@ from commitizen.config import BaseConfig
 
 
 class PostCommit:
-    def __init__(self, config: BaseConfig, arguments):
+    def __init__(self, config: BaseConfig, *args):
         pass
 
     def __call__(self, *args, **kwargs):
