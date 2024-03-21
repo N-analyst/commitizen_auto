@@ -484,6 +484,10 @@ data = {
                     }
                 ]
             },
+            {
+                "name": ["post-commit"],
+                "func": commands.PostCommit
+            }
         ],
     },
 }

@@ -39,8 +39,10 @@ class PrepareCommitMsg:
             backup_file = Path(
                 tempfile.gettempdir(), f"cz.commit{os.environ.get('USER', '')}.backup"
             )
+            print(backup_file, '==== backup_file')
 
             if backup_file.is_file():
+                print('==== backup_file.is_file() 로직 진입')
                 # confirm if commit message from backup file should be reused
                 answer = input("retry with previous message? [y/N]: ")
                 if answer.lower() == "y":

@@ -9,6 +9,7 @@ from .list_cz import ListCz
 from .schema import Schema
 from .version import Version
 from .prepare_commit_msg import PrepareCommitMsg
+from .post_commit import PostCommit
 
 
 __all__ = (
@@ -22,5 +23,6 @@ __all__ = (
     "Schema",
     "Version",
     "Init",
-    "PrepareCommitMsg"
+    "PrepareCommitMsg",
+    "PostCommit"
 )

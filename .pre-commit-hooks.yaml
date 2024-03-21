@@ -40,7 +40,7 @@
   name: commitizen post-commit
   description: >
     cz-prepare-commit-msg created backup unlink.
-  entry: /hooks/post-commit.py
+  entry: cz post-commit
   stages: [post-commit]
   language: python
   language_version: python3
