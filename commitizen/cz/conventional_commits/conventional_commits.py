@@ -11,7 +11,8 @@ __all__ = ["ConventionalCommitsCz"]
 
 def parse_message(text):
     if isinstance(text, str) and text != '':
-        text = (text[0].upper() + text[1:]).replace('.', '')
+        text = text.strip('.')
+        text = (text[0].upper() + text[1:])
 
     return required_validator(text, msg="Message is required.")
 
@@ -114,7 +115,7 @@ class ConventionalCommitsCz(BaseCommitizen):
                 "type": "input",
                 "name": "message",
                 "message": (
-                    "메시지를 입력하세요. (첫글자는 대문자로 변환됩니다. / '.'도 제거 됩니다.)\n"
+                    "메시지를 입력하세요. (첫글자는 대문자로 변환됩니다. / 문장끝 '.'도 제거 됩니다.)\n"
                 ),
                 "filter": parse_message,
             },
