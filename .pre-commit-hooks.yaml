@@ -42,6 +42,7 @@
     cz-prepare-commit-msg created backup unlink.
   entry: cz post-commit
   stages: [post-commit]
+  always_run: true
   language: python
   language_version: python3
   minimum_pre_commit_version: "1.4.3"
