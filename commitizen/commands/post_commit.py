@@ -16,7 +16,6 @@ class PostCommit:
         backup_file = Path(
             tempfile.gettempdir(), f"cz.commit{os.environ.get('USER', '')}.backup"
         )
-        print(backup_file, '=== 이거 실행 안되나?', flush=True)
 
         # remove backup file if it exists
         if backup_file.is_file():
